@@ -92,5 +92,138 @@ publishDate: 2024-01-01
         </a>
       </div>
     </div>
+
+    <!-- PR Step-by-step Guide -->
+    <div class="mx-auto mt-20 max-w-3xl">
+      <div class="mb-10 text-center">
+        <h2 class="mb-3 text-2xl font-bold tracking-tight sm:text-3xl">{t('guide.heading')}</h2>
+        <p class="text-muted-foreground">{t('guide.description')}</p>
+      </div>
+
+      <!-- Timeline -->
+      <div class="relative space-y-0">
+        <!-- Vertical line -->
+        <div class="absolute left-6 top-8 bottom-8 w-px bg-gradient-to-b from-primary/50 via-border to-border/30 sm:left-8"></div>
+
+        <!-- Step 1: Fork -->
+        <div class="relative flex gap-4 pb-10 sm:gap-6">
+          <div class="relative z-10 flex h-12 w-12 shrink-0 items-center justify-center rounded-full border-2 border-primary bg-background text-sm font-bold text-primary shadow-sm shadow-primary/20 sm:h-16 sm:w-16 sm:text-base">1</div>
+          <div class="pt-2 sm:pt-3">
+            <h3 class="font-semibold text-foreground">{t('guide.step1.title')}</h3>
+            <p class="mt-1 text-sm leading-relaxed text-muted-foreground">{t('guide.step1.desc')}</p>
+          </div>
+        </div>
+
+        <!-- Step 2: Clone -->
+        <div class="relative flex gap-4 pb-10 sm:gap-6">
+          <div class="relative z-10 flex h-12 w-12 shrink-0 items-center justify-center rounded-full border-2 border-primary/60 bg-background text-sm font-bold text-primary/80 sm:h-16 sm:w-16 sm:text-base">2</div>
+          <div class="pt-2 sm:pt-3">
+            <h3 class="font-semibold text-foreground">{t('guide.step2.title')}</h3>
+            <p class="mt-1 text-sm leading-relaxed text-muted-foreground">{t('guide.step2.desc')}</p>
+            <pre class="mt-2 overflow-x-auto rounded-lg bg-muted/80 px-4 py-3 text-xs leading-relaxed text-foreground sm:text-sm"><code class="font-mono">{t('guide.step2.code')}</code></pre>
+          </div>
+        </div>
+
+        <!-- Step 3: Branch -->
+        <div class="relative flex gap-4 pb-10 sm:gap-6">
+          <div class="relative z-10 flex h-12 w-12 shrink-0 items-center justify-center rounded-full border-2 border-primary/60 bg-background text-sm font-bold text-primary/80 sm:h-16 sm:w-16 sm:text-base">3</div>
+          <div class="pt-2 sm:pt-3">
+            <h3 class="font-semibold text-foreground">{t('guide.step3.title')}</h3>
+            <p class="mt-1 text-sm leading-relaxed text-muted-foreground">{t('guide.step3.desc')}</p>
+            <pre class="mt-2 overflow-x-auto rounded-lg bg-muted/80 px-4 py-3 text-xs leading-relaxed text-foreground sm:text-sm"><code class="font-mono">{t('guide.step3.code')}</code></pre>
+          </div>
+        </div>
+
+        <!-- Step 4: Add file -->
+        <div class="relative flex gap-4 pb-10 sm:gap-6">
+          <div class="relative z-10 flex h-12 w-12 shrink-0 items-center justify-center rounded-full border-2 border-primary/60 bg-background text-sm font-bold text-primary/80 sm:h-16 sm:w-16 sm:text-base">4</div>
+          <div class="pt-2 sm:pt-3">
+            <h3 class="font-semibold text-foreground">{t('guide.step4.title')}</h3>
+            <p class="mt-1 text-sm leading-relaxed text-muted-foreground">{t('guide.step4.desc')}</p>
+          </div>
+        </div>
+
+        <!-- Step 5: Frontmatter -->
+        <div class="relative flex gap-4 pb-10 sm:gap-6">
+          <div class="relative z-10 flex h-12 w-12 shrink-0 items-center justify-center rounded-full border-2 border-primary/60 bg-background text-sm font-bold text-primary/80 sm:h-16 sm:w-16 sm:text-base">5</div>
+          <div class="pt-2 sm:pt-3">
+            <h3 class="font-semibold text-foreground">{t('guide.step5.title')}</h3>
+            <p class="mt-1 text-sm leading-relaxed text-muted-foreground">{t('guide.step5.desc')}</p>
+          </div>
+        </div>
+
+        <!-- Step 6: Commit -->
+        <div class="relative flex gap-4 pb-10 sm:gap-6">
+          <div class="relative z-10 flex h-12 w-12 shrink-0 items-center justify-center rounded-full border-2 border-primary/60 bg-background text-sm font-bold text-primary/80 sm:h-16 sm:w-16 sm:text-base">6</div>
+          <div class="pt-2 sm:pt-3">
+            <h3 class="font-semibold text-foreground">{t('guide.step6.title')}</h3>
+            <p class="mt-1 text-sm leading-relaxed text-muted-foreground">{t('guide.step6.desc')}</p>
+            <pre class="mt-2 overflow-x-auto rounded-lg bg-muted/80 px-4 py-3 text-xs leading-relaxed text-foreground sm:text-sm"><code class="font-mono">{t('guide.step6.code')}</code></pre>
+          </div>
+        </div>
+
+        <!-- Step 7: Open PR -->
+        <div class="relative flex gap-4 pb-10 sm:gap-6">
+          <div class="relative z-10 flex h-12 w-12 shrink-0 items-center justify-center rounded-full border-2 border-primary/60 bg-background text-sm font-bold text-primary/80 sm:h-16 sm:w-16 sm:text-base">7</div>
+          <div class="pt-2 sm:pt-3">
+            <h3 class="font-semibold text-foreground">{t('guide.step7.title')}</h3>
+            <p class="mt-1 text-sm leading-relaxed text-muted-foreground">{t('guide.step7.desc')}</p>
+          </div>
+        </div>
+
+        <!-- Step 8: Wait -->
+        <div class="relative flex gap-4 pb-2 sm:gap-6">
+          <div class="relative z-10 flex h-12 w-12 shrink-0 items-center justify-center rounded-full border-2 border-green-500 bg-background text-sm font-bold text-green-500 sm:h-16 sm:w-16 sm:text-base">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m9 12 2 2 4-4"/></svg>
+          </div>
+          <div class="pt-2 sm:pt-3">
+            <h3 class="font-semibold text-foreground">{t('guide.step8.title')}</h3>
+            <p class="mt-1 text-sm leading-relaxed text-muted-foreground">{t('guide.step8.desc')}</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Validation rules -->
+      <div class="mt-12 rounded-xl border border-border/50 bg-card/50 p-6 backdrop-blur-sm">
+        <div class="mb-4 flex items-center gap-2">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-amber-500"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg>
+          <h3 class="text-sm font-semibold uppercase tracking-wider text-muted-foreground">{t('guide.rules.title')}</h3>
+        </div>
+        <p class="mb-4 text-sm text-muted-foreground">{t('guide.rules.desc')}</p>
+        <ul class="space-y-2">
+          <li class="flex items-start gap-2 text-sm text-muted-foreground">
+            <span class="mt-0.5 text-green-500">✓</span> {t('guide.rule1')}
+          </li>
+          <li class="flex items-start gap-2 text-sm text-muted-foreground">
+            <span class="mt-0.5 text-green-500">✓</span> {t('guide.rule2')}
+          </li>
+          <li class="flex items-start gap-2 text-sm text-muted-foreground">
+            <span class="mt-0.5 text-green-500">✓</span> {t('guide.rule3')}
+          </li>
+          <li class="flex items-start gap-2 text-sm text-muted-foreground">
+            <span class="mt-0.5 text-green-500">✓</span> {t('guide.rule4')}
+          </li>
+          <li class="flex items-start gap-2 text-sm text-muted-foreground">
+            <span class="mt-0.5 text-green-500">✓</span> {t('guide.rule5')}
+          </li>
+          <li class="flex items-start gap-2 text-sm text-muted-foreground">
+            <span class="mt-0.5 text-green-500">✓</span> {t('guide.rule6')}
+          </li>
+          <li class="flex items-start gap-2 text-sm text-muted-foreground">
+            <span class="mt-0.5 text-green-500">✓</span> {t('guide.rule7')}
+          </li>
+          <li class="flex items-start gap-2 text-sm text-muted-foreground">
+            <span class="mt-0.5 text-green-500">✓</span> {t('guide.rule8')}
+          </li>
+        </ul>
+      </div>
+
+      <!-- Tip -->
+      <div class="mt-6 rounded-xl border border-blue-500/20 bg-blue-500/5 p-4">
+        <p class="text-sm text-blue-400">
+          <span class="font-semibold">💡 {t('guide.tip')}</span>
+        </p>
+      </div>
+    </div>
   </div>
 </section>
