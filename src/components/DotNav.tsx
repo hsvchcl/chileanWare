@@ -14,7 +14,6 @@ export default function DotNav({ lang = 'en' }: Props) {
     { id: 'inicio', label: t(lang, 'nav.home') },
     { id: 'proyectos', label: t(lang, 'nav.projects') },
     { id: 'contribuir', label: t(lang, 'nav.contribute') },
-    { id: 'sponsors', label: t(lang, 'nav.sponsors') },
   ]
 
   const TOOLTIP_FLASH_DURATION = 2000
@@ -47,9 +46,19 @@ export default function DotNav({ lang = 'en' }: Props) {
   }, [])
 
   useEffect(() => {
-    window.addEventListener('scroll', handleScroll, { passive: true })
+    // Throttle scroll handler to ~60fps to reduce TBT
+    let ticking = false
+    const throttledScroll = () => {
+      if (ticking) return
+      ticking = true
+      requestAnimationFrame(() => {
+        handleScroll()
+        ticking = false
+      })
+    }
+    window.addEventListener('scroll', throttledScroll, { passive: true })
     handleScroll()
-    return () => window.removeEventListener('scroll', handleScroll)
+    return () => window.removeEventListener('scroll', throttledScroll)
   }, [handleScroll])
 
   // Flash tooltip when active section changes (only when dots are visible)

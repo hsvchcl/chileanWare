@@ -231,3 +231,12 @@ html::view-transition {
     @apply bg-background text-foreground;
     }
 }
+
+/* ── content-visibility: skip rendering for off-screen sections ── */
+/* Improves initial paint by deferring layout/paint of below-fold content */
+#proyectos,
+#contribuir,
+footer {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 800px;
+}

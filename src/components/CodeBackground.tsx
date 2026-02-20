@@ -135,12 +135,33 @@ export default function CodeBackground() {
     const ctx = canvas.getContext('2d')
     if (!ctx) return
 
-    const getSize = () => {
-      const r = container.getBoundingClientRect()
-      return { w: r.width, h: r.height }
+    // ── Visibility tracking — pause when off-screen ───────────────
+    let isVisible = true
+    const observer = new IntersectionObserver(
+      ([entry]) => { isVisible = entry.isIntersecting },
+      { threshold: 0.01 }
+    )
+    observer.observe(container)
+
+    // Also pause when tab is hidden
+    const handleVisibilityChange = () => {
+      if (document.hidden) isVisible = false
+      // When tab becomes visible again, let IntersectionObserver decide
     }
+    document.addEventListener('visibilitychange', handleVisibilityChange)
+
+    // Cache size to avoid getBoundingClientRect() on every frame (forced reflow)
+    let cachedW = 0
+    let cachedH = 0
+    const updateCachedSize = () => {
+      const r = container.getBoundingClientRect()
+      cachedW = r.width
+      cachedH = r.height
+    }
+    const getSize = () => ({ w: cachedW, h: cachedH })
 
     const resize = () => {
+      updateCachedSize()
       const dpr = window.devicePixelRatio || 1
       const { w, h } = getSize()
       canvas.width = w * dpr
@@ -220,6 +241,13 @@ export default function CodeBackground() {
     // ── animation loop ──────────────────────────────────────────────
     const animate = () => {
       if (!ctx || !container) return
+
+      // Skip rendering when off-screen or tab hidden to save CPU/GPU
+      if (!isVisible) {
+        animationRef.current = requestAnimationFrame(animate)
+        return
+      }
+
       const { w, h } = getSize()
       ctx.clearRect(0, 0, w, h)
       timeRef.current++
@@ -275,15 +303,21 @@ export default function CodeBackground() {
       ctx.clip()
 
       // ── Subtle grid lines (meridians & parallels) ─────────────────
+      // On mobile, use coarser grids and lower step resolution to reduce CPU
+      const gridParallelStep = mobile ? 30 : 20
+      const gridLonStep = mobile ? 8 : 4
+      const gridMeridianStep = mobile ? 60 : 30
+      const gridLatStep = mobile ? 8 : 4
+
       ctx.strokeStyle = 'rgba(80, 140, 220, 0.05)'
       ctx.lineWidth = 0.5
 
       // Parallels
-      for (let latDeg = -60; latDeg <= 80; latDeg += 20) {
+      for (let latDeg = -60; latDeg <= 80; latDeg += gridParallelStep) {
         const latR = (latDeg * Math.PI) / 180
         ctx.beginPath()
         let first = true
-        for (let lonDeg = -180; lonDeg <= 180; lonDeg += 4) {
+        for (let lonDeg = -180; lonDeg <= 180; lonDeg += gridLonStep) {
           const lonR = (lonDeg * Math.PI) / 180
           const p = project(latR, lonR, cx, cy, radius, rotY, tiltX)
           if (p.z < -0.05) { first = true; continue }
@@ -294,11 +328,11 @@ export default function CodeBackground() {
       }
 
       // Meridians
-      for (let lonDeg = -180; lonDeg < 180; lonDeg += 30) {
+      for (let lonDeg = -180; lonDeg < 180; lonDeg += gridMeridianStep) {
         const lonR = (lonDeg * Math.PI) / 180
         ctx.beginPath()
         let first = true
-        for (let latDeg = -90; latDeg <= 90; latDeg += 4) {
+        for (let latDeg = -90; latDeg <= 90; latDeg += gridLatStep) {
           const latR = (latDeg * Math.PI) / 180
           const p = project(latR, lonR, cx, cy, radius, rotY, tiltX)
           if (p.z < -0.05) { first = true; continue }
@@ -334,14 +368,16 @@ export default function CodeBackground() {
       ctx.fill()
 
       // ── draw land dots ────────────────────────────────────────────
-      const projected = landDots.map(dot => {
+      // Project and filter in one pass — skip back-facing dots early to avoid allocations
+      const projected: Array<LandDot & { sx: number; sy: number; z: number; scale: number; nx: number; ny: number; nz: number }> = []
+      for (const dot of landDots) {
         const p = project(dot.lat, dot.lon, cx, cy, radius, rotY, tiltX)
-        return { ...dot, ...p }
-      }).sort((a, b) => a.z - b.z)
+        if (p.z < -0.1) continue  // skip back-facing dots
+        projected.push({ ...dot, ...p })
+      }
+      projected.sort((a, b) => a.z - b.z)
 
       for (const dot of projected) {
-        if (dot.z < -0.1) continue
-
         const dotR = Math.max(1.0, 2.2 * dot.scale)
         const depthFade = Math.max(0, Math.min(1, (dot.z + 0.1) / 0.45))
 
@@ -349,16 +385,18 @@ export default function CodeBackground() {
           const pulse = 0.75 + 0.25 * Math.sin(t * 0.04 + dot.lat * 8)
           const alpha = depthFade * pulse
 
-          // Outer glow
-          const glowR = dotR * (5 + Math.sin(t * 0.02) * 2)
-          const grad = ctx.createRadialGradient(dot.sx, dot.sy, 0, dot.sx, dot.sy, glowR)
-          grad.addColorStop(0, `rgba(255, 60, 40, ${0.4 * alpha})`)
-          grad.addColorStop(0.3, `rgba(255, 40, 30, ${0.15 * alpha})`)
-          grad.addColorStop(1, 'rgba(255, 30, 20, 0)')
-          ctx.fillStyle = grad
-          ctx.beginPath()
-          ctx.arc(dot.sx, dot.sy, glowR, 0, Math.PI * 2)
-          ctx.fill()
+          if (!mobile) {
+            // Outer glow — expensive radial gradient, skip on mobile
+            const glowR = dotR * (5 + Math.sin(t * 0.02) * 2)
+            const grad = ctx.createRadialGradient(dot.sx, dot.sy, 0, dot.sx, dot.sy, glowR)
+            grad.addColorStop(0, `rgba(255, 60, 40, ${0.4 * alpha})`)
+            grad.addColorStop(0.3, `rgba(255, 40, 30, ${0.15 * alpha})`)
+            grad.addColorStop(1, 'rgba(255, 30, 20, 0)')
+            ctx.fillStyle = grad
+            ctx.beginPath()
+            ctx.arc(dot.sx, dot.sy, glowR, 0, Math.PI * 2)
+            ctx.fill()
+          }
 
           // Main dot
           ctx.beginPath()
@@ -424,7 +462,8 @@ export default function CodeBackground() {
       }
 
       // ── data packets (arcs on the sphere) ─────────────────────────
-      if (introProgress >= 1 && t % 80 === 0 && packetsRef.current.length < 4) {
+      const maxPackets = mobile ? 2 : 4
+      if (introProgress >= 1 && t % 80 === 0 && packetsRef.current.length < maxPackets) {
         packetsRef.current.push(spawnPacket())
       }
 
@@ -434,7 +473,7 @@ export default function CodeBackground() {
         if (pkt.progress > 1) continue
 
         // Draw trail + head along the great circle arc
-        const trailSteps = 12
+        const trailSteps = mobile ? 6 : 12
         for (let i = trailSteps; i >= 0; i--) {
           const tp = Math.max(0, pkt.progress - i * 0.015)
           const { lat, lon } = slerp(pkt.srcLat, pkt.srcLon, pkt.dstLat, pkt.dstLon, tp)
@@ -495,6 +534,8 @@ export default function CodeBackground() {
     return () => {
       cancelAnimationFrame(animationRef.current)
       window.removeEventListener('resize', onResize)
+      document.removeEventListener('visibilitychange', handleVisibilityChange)
+      observer.disconnect()
     }
   }, [])
 
