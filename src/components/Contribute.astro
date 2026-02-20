@@ -110,7 +110,8 @@ publishDate: 2024-01-01
           <div class="relative z-10 flex h-12 w-12 shrink-0 items-center justify-center rounded-full border-2 border-primary bg-background text-sm font-bold text-primary shadow-sm shadow-primary/20 sm:h-16 sm:w-16 sm:text-base">1</div>
           <div class="pt-2 sm:pt-3">
             <h3 class="font-semibold text-foreground">{t('guide.step1.title')}</h3>
-            <p class="mt-1 text-sm leading-relaxed text-muted-foreground">{t('guide.step1.desc')}</p>
+            <p class="mt-1 text-sm leading-relaxed text-muted-foreground" set:html={t('guide.step1.desc').replace(/\*\*(.*?)\*\*/g, '<strong class="text-foreground">$1</strong>')} />
+            <p class="mt-2 rounded-md bg-muted/50 px-3 py-1.5 text-xs text-muted-foreground font-mono">{t('guide.step1.note')}</p>
           </div>
         </div>
 
@@ -119,7 +120,7 @@ publishDate: 2024-01-01
           <div class="relative z-10 flex h-12 w-12 shrink-0 items-center justify-center rounded-full border-2 border-primary/60 bg-background text-sm font-bold text-primary/80 sm:h-16 sm:w-16 sm:text-base">2</div>
           <div class="pt-2 sm:pt-3">
             <h3 class="font-semibold text-foreground">{t('guide.step2.title')}</h3>
-            <p class="mt-1 text-sm leading-relaxed text-muted-foreground">{t('guide.step2.desc')}</p>
+            <p class="mt-1 text-sm leading-relaxed text-muted-foreground" set:html={t('guide.step2.desc').replace(/\*\*(.*?)\*\*/g, '<strong class="text-foreground">$1</strong>')} />
             <pre class="mt-2 overflow-x-auto rounded-lg bg-muted/80 px-4 py-3 text-xs leading-relaxed text-foreground sm:text-sm"><code class="font-mono">{t('guide.step2.code')}</code></pre>
           </div>
         </div>
@@ -129,8 +130,9 @@ publishDate: 2024-01-01
           <div class="relative z-10 flex h-12 w-12 shrink-0 items-center justify-center rounded-full border-2 border-primary/60 bg-background text-sm font-bold text-primary/80 sm:h-16 sm:w-16 sm:text-base">3</div>
           <div class="pt-2 sm:pt-3">
             <h3 class="font-semibold text-foreground">{t('guide.step3.title')}</h3>
-            <p class="mt-1 text-sm leading-relaxed text-muted-foreground">{t('guide.step3.desc')}</p>
+            <p class="mt-1 text-sm leading-relaxed text-muted-foreground" set:html={t('guide.step3.desc').replace(/`(.*?)`/g, '<code class="rounded bg-muted px-1.5 py-0.5 text-xs text-foreground">$1</code>')} />
             <pre class="mt-2 overflow-x-auto rounded-lg bg-muted/80 px-4 py-3 text-xs leading-relaxed text-foreground sm:text-sm"><code class="font-mono">{t('guide.step3.code')}</code></pre>
+            <p class="mt-2 text-xs italic text-muted-foreground/70">💡 {t('guide.step3.note')}</p>
           </div>
         </div>
 
@@ -139,7 +141,8 @@ publishDate: 2024-01-01
           <div class="relative z-10 flex h-12 w-12 shrink-0 items-center justify-center rounded-full border-2 border-primary/60 bg-background text-sm font-bold text-primary/80 sm:h-16 sm:w-16 sm:text-base">4</div>
           <div class="pt-2 sm:pt-3">
             <h3 class="font-semibold text-foreground">{t('guide.step4.title')}</h3>
-            <p class="mt-1 text-sm leading-relaxed text-muted-foreground">{t('guide.step4.desc')}</p>
+            <p class="mt-1 text-sm leading-relaxed text-muted-foreground" set:html={t('guide.step4.desc').replace(/`(.*?)`/g, '<code class="rounded bg-muted px-1.5 py-0.5 text-xs text-foreground">$1</code>').replace(/\*\*(.*?)\*\*/g, '<strong class="text-foreground">$1</strong>')} />
+            <p class="mt-2 rounded-md bg-muted/50 px-3 py-1.5 text-xs text-muted-foreground font-mono">📁 {t('guide.step4.note')}</p>
           </div>
         </div>
 
@@ -148,7 +151,7 @@ publishDate: 2024-01-01
           <div class="relative z-10 flex h-12 w-12 shrink-0 items-center justify-center rounded-full border-2 border-primary/60 bg-background text-sm font-bold text-primary/80 sm:h-16 sm:w-16 sm:text-base">5</div>
           <div class="pt-2 sm:pt-3">
             <h3 class="font-semibold text-foreground">{t('guide.step5.title')}</h3>
-            <p class="mt-1 text-sm leading-relaxed text-muted-foreground">{t('guide.step5.desc')}</p>
+            <p class="mt-1 text-sm leading-relaxed text-muted-foreground" set:html={t('guide.step5.desc').replace(/`(.*?)`/g, '<code class="rounded bg-muted px-1.5 py-0.5 text-xs text-foreground">$1</code>').replace(/\*\*(.*?)\*\*/g, '<strong class="text-foreground">$1</strong>')} />
           </div>
         </div>
 
@@ -157,8 +160,9 @@ publishDate: 2024-01-01
           <div class="relative z-10 flex h-12 w-12 shrink-0 items-center justify-center rounded-full border-2 border-primary/60 bg-background text-sm font-bold text-primary/80 sm:h-16 sm:w-16 sm:text-base">6</div>
           <div class="pt-2 sm:pt-3">
             <h3 class="font-semibold text-foreground">{t('guide.step6.title')}</h3>
-            <p class="mt-1 text-sm leading-relaxed text-muted-foreground">{t('guide.step6.desc')}</p>
+            <p class="mt-1 text-sm leading-relaxed text-muted-foreground" set:html={t('guide.step6.desc').replace(/\*\*(.*?)\*\*/g, '<strong class="text-foreground">$1</strong>')} />
             <pre class="mt-2 overflow-x-auto rounded-lg bg-muted/80 px-4 py-3 text-xs leading-relaxed text-foreground sm:text-sm"><code class="font-mono">{t('guide.step6.code')}</code></pre>
+            <p class="mt-2 rounded-md border border-amber-500/20 bg-amber-500/5 px-3 py-1.5 text-xs text-amber-400">⚠️ {t('guide.step6.note')}</p>
           </div>
         </div>
 
@@ -167,7 +171,8 @@ publishDate: 2024-01-01
           <div class="relative z-10 flex h-12 w-12 shrink-0 items-center justify-center rounded-full border-2 border-primary/60 bg-background text-sm font-bold text-primary/80 sm:h-16 sm:w-16 sm:text-base">7</div>
           <div class="pt-2 sm:pt-3">
             <h3 class="font-semibold text-foreground">{t('guide.step7.title')}</h3>
-            <p class="mt-1 text-sm leading-relaxed text-muted-foreground">{t('guide.step7.desc')}</p>
+            <p class="mt-1 text-sm leading-relaxed text-muted-foreground" set:html={t('guide.step7.desc').replace(/\*\*(.*?)\*\*/g, '<strong class="text-foreground">$1</strong>')} />
+            <p class="mt-2 rounded-md bg-muted/50 px-3 py-1.5 text-xs text-muted-foreground font-mono">{t('guide.step7.note')}</p>
           </div>
         </div>
 
@@ -178,7 +183,7 @@ publishDate: 2024-01-01
           </div>
           <div class="pt-2 sm:pt-3">
             <h3 class="font-semibold text-foreground">{t('guide.step8.title')}</h3>
-            <p class="mt-1 text-sm leading-relaxed text-muted-foreground">{t('guide.step8.desc')}</p>
+            <p class="mt-1 text-sm leading-relaxed text-muted-foreground" set:html={t('guide.step8.desc')} />
           </div>
         </div>
       </div>

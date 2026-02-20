@@ -5,7 +5,6 @@ import DotNav from '../../components/DotNav.tsx'
 import Hero from '../../components/Hero.astro'
 import ProjectsGrid from '../../components/ProjectsGrid.tsx'
 import Contribute from '../../components/Contribute.astro'
-import Sponsors from '../../components/Sponsors.astro'
 import Footer from '../../components/Footer.astro'
 import LangSwitch from '../../components/LangSwitch.astro'
 import ThemeToggle from '../../components/ThemeToggle.astro'
@@ -58,12 +57,11 @@ const categoryCount = uniqueCategories.size
 <Layout lang={lang}>
   <LangSwitch lang={lang} />
   <ThemeToggle />
-  <DotNav client:load lang={lang} />
+  <DotNav client:idle lang={lang} />
   <main>
     <Hero lang={lang} projectCount={projectCount} categoryCount={categoryCount} />
-    <ProjectsGrid client:load projects={sortedProjects} categories={categories} lang={lang} />
+    <ProjectsGrid client:visible projects={sortedProjects} categories={categories} lang={lang} />
     <Contribute lang={lang} />
-    <Sponsors lang={lang} />
   </main>
   <Footer lang={lang} />
 </Layout>
