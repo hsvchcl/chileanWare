@@ -1,0 +1,31 @@
+---
+interface Props {
+  categories: { name: string; count: number; icon: string }[]
+}
+
+const { categories } = Astro.props
+---
+
+<section id="categorias" class="border-b border-border/40 bg-muted/20">
+  <div class="container mx-auto max-w-6xl px-4 py-20 sm:px-6">
+    <div class="mb-12 text-center">
+      <h2 class="mb-3 text-2xl font-bold tracking-tight sm:text-3xl">Explora por categoría</h2>
+      <p class="mx-auto max-w-lg text-muted-foreground">
+        Filtra los proyectos según el tipo de software que te interesa.
+      </p>
+    </div>
+
+    <div class="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6">
+      {categories.map(({ name, count, icon }) => (
+        <a
+          href={`/#proyectos`}
+          class="group flex flex-col items-center gap-2 rounded-xl border border-border/50 bg-card/50 p-4 text-center backdrop-blur-sm transition-all hover:border-border hover:bg-card hover:shadow-md"
+        >
+          <span class="text-2xl">{icon}</span>
+          <span class="text-sm font-medium group-hover:text-primary transition-colors">{name}</span>
+          <span class="text-xs text-muted-foreground">{count} {count === 1 ? 'proyecto' : 'proyectos'}</span>
+        </a>
+      ))}
+    </div>
+  </div>
+</section>

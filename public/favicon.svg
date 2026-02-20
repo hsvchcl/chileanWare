@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <defs>
+    <clipPath id="c"><rect width="32" height="32" rx="6"/></clipPath>
+  </defs>
+  <g clip-path="url(#c)">
+    <!-- Blue canton -->
+    <rect x="0" y="0" width="12" height="16" fill="#0039A6"/>
+    <!-- White star in canton -->
+    <polygon points="6,3.5 7.5,7.5 11.5,7.5 8.2,10 9.4,14 6,11.5 2.6,14 3.8,10 0.5,7.5 4.5,7.5" fill="#FFFFFF"/>
+    <!-- White top-right area -->
+    <rect x="12" y="0" width="20" height="16" fill="#FFFFFF"/>
+    <!-- Red bottom half -->
+    <rect x="0" y="16" width="32" height="16" fill="#D52B1E"/>
+  </g>
+  <!-- Border for contrast on dark/light backgrounds -->
+  <rect width="32" height="32" rx="6" fill="none" stroke="rgba(128,128,128,0.25)" stroke-width="1"/>
+</svg>

@@ -1,0 +1,188 @@
+---
+import { getCollection, render } from 'astro:content'
+import Layout from '../../../layouts/Layout.astro'
+import Footer from '../../../components/Footer.astro'
+import type { Lang } from '../../../i18n'
+import { useTranslations, getDateLocale, getLangPrefix } from '../../../i18n'
+
+const lang: Lang = 'es'
+const t = useTranslations(lang)
+const prefix = getLangPrefix(lang)
+
+export async function getStaticPaths() {
+  const projects = await getCollection('projects')
+  return projects.map((project) => ({
+    params: { slug: project.id.replace(/\.md$/, '') },
+    props: { project },
+  }))
+}
+
+const { project } = Astro.props
+const { Content } = await render(project)
+const { title, description, author, authorUrl, repoUrl, websiteUrl, tags, category, publishDate } = project.data
+
+const categoryIcons: Record<string, string> = {
+  'CLI': '⌨️',
+  'Web': '🌐',
+  'Mobile': '📱',
+  'API': '🔌',
+  'Library': '📦',
+  'Framework': '🏗️',
+  'DevTool': '🛠️',
+  'Data': '📊',
+  'AI/ML': '🤖',
+  'IoT': '📡',
+  'Game': '🎮',
+  'Other': '💡',
+}
+
+const formattedDate = publishDate.toLocaleDateString(getDateLocale(lang), {
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric',
+})
+const slug = project.id.replace(/\.md$/, '')
+const isNpm = websiteUrl?.includes('npmjs.com') ?? false
+---
+
+<Layout title={`${title} — chileanWare`} description={description} lang={lang} type="article" publishDate={publishDate.toISOString()} articleAuthor={author} articleTags={tags}>
+  <main class="min-h-screen">
+    <div
+      class="container mx-auto max-w-4xl px-4 py-12 sm:px-6 sm:py-16"
+      style="-webkit-transform: translateZ(0); transform: translateZ(0);"
+      transition:name={`card-${slug}`}
+      transition:animate="initial"
+    >
+      <!-- Back link -->
+      <a
+        href={`${prefix}/`}
+        id="back-link"
+        class="mb-8 inline-flex items-center gap-2 text-sm text-muted-foreground transition-colors hover:text-foreground"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="m12 19-7-7 7-7"/><path d="M19 12H5"/>
+        </svg>
+        {t('detail.back')}
+      </a>
+
+      <!-- Header -->
+      <header class="mb-10">
+        <div class="mb-4 flex flex-wrap items-center gap-3">
+          <span
+            class="inline-flex items-center gap-1.5 rounded-full border border-border/50 bg-muted/50 px-3 py-1 text-sm"
+          >
+            <span>{categoryIcons[category] || '💡'}</span>
+            {category}
+          </span>
+          <span class="text-sm text-muted-foreground">•</span>
+          <time class="text-sm text-muted-foreground" datetime={publishDate.toISOString()}>
+            {formattedDate}
+          </time>
+        </div>
+
+        <h1
+          class="mb-4 text-3xl font-extrabold tracking-tight sm:text-4xl lg:text-5xl"
+        >
+          {title}
+        </h1>
+
+        <p
+          class="mb-6 text-lg leading-relaxed text-muted-foreground"
+        >
+          {description}
+        </p>
+
+        <!-- Author & Links -->
+        <div class="flex flex-wrap items-center gap-4">
+          <div class="flex items-center gap-2">
+            <div class="flex h-8 w-8 items-center justify-center rounded-full bg-muted text-sm font-medium">
+              {author.charAt(0).toUpperCase()}
+            </div>
+            {authorUrl ? (
+              <a href={authorUrl} target="_blank" rel="noopener noreferrer" class="text-sm font-medium hover:underline">
+                {author}
+              </a>
+            ) : (
+              <span class="text-sm font-medium">{author}</span>
+            )}
+          </div>
+
+          <div class="flex items-center gap-2">
+            {repoUrl && (
+              <a
+                href={repoUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="inline-flex h-9 items-center gap-2 rounded-lg border border-border bg-background px-4 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                </svg>
+                {t('detail.repo')}
+              </a>
+            )}
+            {websiteUrl && isNpm && (
+              <a
+                href={websiteUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="inline-flex h-9 items-center gap-2 rounded-lg bg-[#CB3837] px-4 text-sm font-medium text-white transition-colors hover:bg-[#CB3837]/90"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M0 0v24h24V0H0zm19.2 19.2H12v-9.6H7.2v9.6H4.8V4.8h14.4v14.4z"/>
+                </svg>
+                npm
+              </a>
+            )}
+            {websiteUrl && !isNpm && (
+              <a
+                href={websiteUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="inline-flex h-9 items-center gap-2 rounded-lg bg-primary px-4 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/>
+                </svg>
+                {t('detail.visit')}
+              </a>
+            )}
+          </div>
+        </div>
+
+        <!-- Tags -->
+        <div class="mt-6 flex flex-wrap gap-2">
+          {tags.map((tag) => (
+            <span class="inline-flex items-center rounded-md border border-border/50 bg-muted/50 px-2.5 py-1 text-xs font-medium text-muted-foreground">
+              #{tag}
+            </span>
+          ))}
+        </div>
+      </header>
+
+      <!-- Separator -->
+      <div class="mb-10 h-px bg-border/60"></div>
+
+      <!-- Content -->
+      <article class="prose prose-invert prose-lg max-w-none prose-headings:font-bold prose-headings:tracking-tight prose-h2:text-2xl prose-h3:text-xl prose-p:text-muted-foreground prose-p:leading-relaxed prose-a:text-primary prose-a:underline prose-a:underline-offset-4 prose-strong:text-foreground prose-code:rounded prose-code:bg-muted prose-code:px-1.5 prose-code:py-0.5 prose-code:text-sm prose-pre:rounded-xl prose-pre:border prose-pre:border-border/50 prose-pre:bg-muted/50 prose-li:text-muted-foreground">
+        <Content />
+      </article>
+    </div>
+  </main>
+  <Footer lang={lang} />
+</Layout>
+
+<script>
+  function setupBackLink() {
+    const link = document.getElementById('back-link')
+    if (!link) return
+    link.addEventListener('click', (e) => {
+      if (window.history.length > 1) {
+        e.preventDefault()
+        window.history.back()
+      }
+    })
+  }
+  setupBackLink()
+  document.addEventListener('astro:after-swap', setupBackLink)
+</script>

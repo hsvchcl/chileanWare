@@ -1,0 +1,157 @@
+---
+import type { Lang } from '../i18n'
+import { useTranslations } from '../i18n'
+
+interface Props {
+  lang?: Lang
+}
+
+const { lang = 'en' } = Astro.props
+const t = useTranslations(lang)
+
+const checkSvg = `<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-green-500"><path d="M20 6 9 17l-5-5"/></svg>`
+---
+
+<section id="sponsors" class="border-b border-border/40">
+  <div class="container mx-auto max-w-6xl px-4 py-20 sm:px-6">
+    <div class="mx-auto max-w-2xl text-center">
+      <div class="mb-4 inline-flex items-center gap-2 rounded-full border border-border/60 bg-muted/50 px-4 py-1.5 text-sm text-muted-foreground">
+        <span>💛</span>
+        {t('sponsors.badge')}
+      </div>
+      <h2 class="mb-3 text-2xl font-bold tracking-tight sm:text-3xl">{t('sponsors.heading')}</h2>
+      <p class="mb-10 text-muted-foreground">
+        {t('sponsors.description')}
+      </p>
+    </div>
+
+    <!-- Sponsor tiers -->
+    <div class="mx-auto grid max-w-4xl gap-6 sm:grid-cols-3">
+      <!-- Tier 1 -->
+      <div class="group relative flex flex-col items-center rounded-xl border border-border/50 bg-card/50 p-8 text-center backdrop-blur-sm transition-all hover:border-yellow-500/30 hover:shadow-lg hover:shadow-yellow-500/5">
+        <div class="mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-yellow-500/10 text-2xl">
+          ☕
+        </div>
+        <h3 class="mb-1 text-lg font-bold">{t('sponsors.tier1.name')}</h3>
+        <p class="mb-4 text-2xl font-extrabold tracking-tight">
+          $5 <span class="text-sm font-normal text-muted-foreground">{t('sponsors.per_month')}</span>
+        </p>
+        <ul class="mb-6 space-y-2 text-sm text-muted-foreground">
+          <li class="flex items-center gap-2">
+            <Fragment set:html={checkSvg} />
+            {t('sponsors.tier1.benefit1')}
+          </li>
+          <li class="flex items-center gap-2">
+            <Fragment set:html={checkSvg} />
+            {t('sponsors.tier1.benefit2')}
+          </li>
+          <li class="flex items-center gap-2">
+            <Fragment set:html={checkSvg} />
+            {t('sponsors.tier1.benefit3')}
+          </li>
+        </ul>
+        <a
+          href="https://github.com/sponsors"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="mt-auto inline-flex h-10 w-full items-center justify-center rounded-lg border border-border bg-background text-sm font-semibold transition-all hover:bg-accent hover:text-accent-foreground"
+        >
+          {t('sponsors.tier1.cta')}
+        </a>
+      </div>
+
+      <!-- Tier 2 -->
+      <div class="group relative flex flex-col items-center rounded-xl border-2 border-primary/50 bg-card/50 p-8 text-center shadow-lg shadow-primary/5 backdrop-blur-sm transition-all hover:border-primary hover:shadow-xl hover:shadow-primary/10">
+        <div class="absolute -top-3 left-1/2 -translate-x-1/2">
+          <span class="inline-flex items-center gap-1 rounded-full bg-primary px-3 py-1 text-xs font-semibold text-primary-foreground shadow-sm">
+            {t('sponsors.tier2.badge')}
+          </span>
+        </div>
+        <div class="mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-primary/10 text-2xl">
+          🚀
+        </div>
+        <h3 class="mb-1 text-lg font-bold">{t('sponsors.tier2.name')}</h3>
+        <p class="mb-4 text-2xl font-extrabold tracking-tight">
+          $15 <span class="text-sm font-normal text-muted-foreground">{t('sponsors.per_month')}</span>
+        </p>
+        <ul class="mb-6 space-y-2 text-sm text-muted-foreground">
+          <li class="flex items-center gap-2">
+            <Fragment set:html={checkSvg} />
+            {t('sponsors.tier2.benefit1')}
+          </li>
+          <li class="flex items-center gap-2">
+            <Fragment set:html={checkSvg} />
+            {t('sponsors.tier2.benefit2')}
+          </li>
+          <li class="flex items-center gap-2">
+            <Fragment set:html={checkSvg} />
+            {t('sponsors.tier2.benefit3')}
+          </li>
+          <li class="flex items-center gap-2">
+            <Fragment set:html={checkSvg} />
+            {t('sponsors.tier2.benefit4')}
+          </li>
+        </ul>
+        <a
+          href="https://github.com/sponsors"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="mt-auto inline-flex h-10 w-full items-center justify-center rounded-lg bg-primary text-sm font-semibold text-primary-foreground shadow-sm transition-all hover:bg-primary/90 hover:shadow-md"
+        >
+          {t('sponsors.tier2.cta')}
+        </a>
+      </div>
+
+      <!-- Tier 3 -->
+      <div class="group relative flex flex-col items-center rounded-xl border border-border/50 bg-card/50 p-8 text-center backdrop-blur-sm transition-all hover:border-amber-500/30 hover:shadow-lg hover:shadow-amber-500/5">
+        <div class="mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-amber-500/10 text-2xl">
+          💎
+        </div>
+        <h3 class="mb-1 text-lg font-bold">{t('sponsors.tier3.name')}</h3>
+        <p class="mb-4 text-2xl font-extrabold tracking-tight">
+          $50 <span class="text-sm font-normal text-muted-foreground">{t('sponsors.per_month')}</span>
+        </p>
+        <ul class="mb-6 space-y-2 text-sm text-muted-foreground">
+          <li class="flex items-center gap-2">
+            <Fragment set:html={checkSvg} />
+            {t('sponsors.tier3.benefit1')}
+          </li>
+          <li class="flex items-center gap-2">
+            <Fragment set:html={checkSvg} />
+            {t('sponsors.tier3.benefit2')}
+          </li>
+          <li class="flex items-center gap-2">
+            <Fragment set:html={checkSvg} />
+            {t('sponsors.tier3.benefit3')}
+          </li>
+          <li class="flex items-center gap-2">
+            <Fragment set:html={checkSvg} />
+            {t('sponsors.tier3.benefit4')}
+          </li>
+        </ul>
+        <a
+          href="https://github.com/sponsors"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="mt-auto inline-flex h-10 w-full items-center justify-center rounded-lg border border-border bg-background text-sm font-semibold transition-all hover:bg-accent hover:text-accent-foreground"
+        >
+          {t('sponsors.tier3.cta')}
+        </a>
+      </div>
+    </div>
+
+    <!-- Current sponsors placeholder -->
+    <div class="mx-auto mt-16 max-w-2xl text-center">
+      <p class="mb-6 text-sm font-medium uppercase tracking-wider text-muted-foreground">{t('sponsors.current')}</p>
+      <div class="flex flex-wrap items-center justify-center gap-6 rounded-xl border border-dashed border-border/60 bg-muted/20 px-8 py-10">
+        <p class="text-sm text-muted-foreground">
+          {t('sponsors.first')}
+        </p>
+      </div>
+      <p class="mt-6 text-sm text-muted-foreground">
+        {t('sponsors.one_time')}
+        <a href="https://github.com/sponsors" target="_blank" rel="noopener noreferrer" class="font-medium text-primary underline underline-offset-4 transition-colors hover:text-primary/80"> {t('sponsors.donation')}</a>.
+      </p>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,64 @@
+---
+import type { Lang } from '../i18n'
+import { useTranslations, getLangPrefix } from '../i18n'
+
+interface Props {
+  lang?: Lang
+}
+
+const { lang = 'en' } = Astro.props
+const t = useTranslations(lang)
+const prefix = getLangPrefix(lang)
+const currentYear = new Date().getFullYear()
+---
+
+<footer class="border-t border-border/40 bg-muted/30">
+  <div class="container mx-auto max-w-6xl px-4 py-12 sm:px-6">
+    <div class="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
+      <!-- Brand -->
+      <div class="sm:col-span-2">
+        <a href={`${prefix}/`} class="flex items-center gap-2">
+          <div class="flex h-8 w-8 items-center justify-center rounded-lg bg-primary text-primary-foreground">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="16 18 22 12 16 6"></polyline>
+              <polyline points="8 6 2 12 8 18"></polyline>
+            </svg>
+          </div>
+          <span class="text-lg font-bold tracking-tight">chileanWare</span>
+        </a>
+        <p class="mt-3 max-w-sm text-sm leading-relaxed text-muted-foreground">
+          {t('footer.description')}
+        </p>
+      </div>
+
+      <!-- Links -->
+      <div>
+        <h4 class="mb-3 text-sm font-semibold">{t('footer.nav')}</h4>
+        <ul class="space-y-2">
+          <li><a href={`${prefix}/#proyectos`} class="text-sm text-muted-foreground transition-colors hover:text-foreground">{t('footer.nav.projects')}</a></li>
+          <li><a href={`${prefix}/#proyectos`} class="text-sm text-muted-foreground transition-colors hover:text-foreground">{t('footer.nav.categories')}</a></li>
+          <li><a href={`${prefix}/#contribuir`} class="text-sm text-muted-foreground transition-colors hover:text-foreground">{t('footer.nav.contribute')}</a></li>
+        </ul>
+      </div>
+
+      <!-- Community -->
+      <div>
+        <h4 class="mb-3 text-sm font-semibold">{t('footer.community')}</h4>
+        <ul class="space-y-2">
+          <li><a href="https://github.com" target="_blank" rel="noopener noreferrer" class="text-sm text-muted-foreground transition-colors hover:text-foreground">GitHub</a></li>
+          <li><a href="https://twitter.com" target="_blank" rel="noopener noreferrer" class="text-sm text-muted-foreground transition-colors hover:text-foreground">Twitter / X</a></li>
+          <li><a href="https://discord.com" target="_blank" rel="noopener noreferrer" class="text-sm text-muted-foreground transition-colors hover:text-foreground">Discord</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="mt-10 flex flex-col items-center justify-between gap-4 border-t border-border/40 pt-8 sm:flex-row">
+      <p class="text-xs text-muted-foreground">
+        &copy; {currentYear} {t('footer.copyright')}
+      </p>
+      <p class="text-xs text-muted-foreground">
+        {t('footer.built')} <a href="https://astro.build" target="_blank" rel="noopener noreferrer" class="font-medium underline underline-offset-4 transition-colors hover:text-foreground">Astro</a> + <a href="https://ui.shadcn.com" target="_blank" rel="noopener noreferrer" class="font-medium underline underline-offset-4 transition-colors hover:text-foreground">shadcn/ui</a> {t('footer.by')} <a href="https://h4nsd3v.web.app/" target="_blank" rel="noopener noreferrer" class="font-medium underline underline-offset-4 transition-colors hover:text-foreground">hsvchcl</a>
+      </p>
+    </div>
+  </div>
+</footer>

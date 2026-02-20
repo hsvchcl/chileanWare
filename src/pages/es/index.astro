@@ -1,0 +1,64 @@
+---
+import { getCollection } from 'astro:content'
+import Layout from '../../layouts/Layout.astro'
+import DotNav from '../../components/DotNav.tsx'
+import Hero from '../../components/Hero.astro'
+import ProjectsGrid from '../../components/ProjectsGrid.tsx'
+import Contribute from '../../components/Contribute.astro'
+import Sponsors from '../../components/Sponsors.astro'
+import Footer from '../../components/Footer.astro'
+import LangSwitch from '../../components/LangSwitch.astro'
+import ThemeToggle from '../../components/ThemeToggle.astro'
+import type { Lang } from '../../i18n'
+
+const lang: Lang = 'es'
+
+const allProjects = await getCollection('projects')
+const sortedProjects = allProjects
+  .sort((a, b) => {
+    if (a.data.featured && !b.data.featured) return -1
+    if (!a.data.featured && b.data.featured) return 1
+    return b.data.publishDate.getTime() - a.data.publishDate.getTime()
+  })
+  .map(p => ({
+    title: p.data.title,
+    description: p.data.description,
+    slug: p.id.replace(/\.md$/, ''),
+    author: p.data.author,
+    tags: p.data.tags,
+    category: p.data.category,
+    featured: p.data.featured,
+    websiteUrl: p.data.websiteUrl,
+    repoUrl: p.data.repoUrl,
+  }))
+
+const categoryIcons: Record<string, string> = {
+  'CLI': '⌨️', 'Web': '🌐', 'Mobile': '📱', 'API': '🔌',
+  'Library': '📦', 'Framework': '🏗️', 'DevTool': '🛠️', 'Data': '📊',
+  'AI/ML': '🤖', 'IoT': '📡', 'Game': '🎮', 'Other': '💡',
+}
+
+const categoryCounts = allProjects.reduce<Record<string, number>>((acc, p) => {
+  acc[p.data.category] = (acc[p.data.category] || 0) + 1
+  return acc
+}, {})
+
+const categories = Object.keys(categoryIcons).map(name => ({
+  name,
+  count: categoryCounts[name] || 0,
+  icon: categoryIcons[name],
+}))
+---
+
+<Layout lang={lang}>
+  <LangSwitch lang={lang} />
+  <ThemeToggle />
+  <DotNav client:load lang={lang} />
+  <main>
+    <Hero lang={lang} />
+    <ProjectsGrid client:load projects={sortedProjects} categories={categories} lang={lang} />
+    <Contribute lang={lang} />
+    <Sponsors lang={lang} />
+  </main>
+  <Footer lang={lang} />
+</Layout>

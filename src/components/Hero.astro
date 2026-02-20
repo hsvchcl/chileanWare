@@ -1,0 +1,174 @@
+---
+import CodeBackground from './CodeBackground.tsx'
+import type { Lang } from '../i18n'
+import { useTranslations, getLangPrefix } from '../i18n'
+
+interface Props {
+  lang?: Lang
+}
+
+const { lang = 'en' } = Astro.props
+const t = useTranslations(lang)
+const prefix = getLangPrefix(lang)
+---
+
+<section id="inicio" class="relative min-h-screen overflow-hidden border-b border-border/40">
+  <!-- Code animation background -->
+  <CodeBackground client:only="react" />
+
+  <!-- Background gradient -->
+  <div class="pointer-events-none absolute inset-0 -z-10">
+    <div class="absolute left-1/2 top-0 -translate-x-1/2 -translate-y-1/2">
+      <div class="h-[600px] w-[600px] rounded-full bg-primary/5 blur-[120px]"></div>
+    </div>
+    <div class="absolute right-0 top-1/2 -translate-y-1/2">
+      <div class="h-[400px] w-[400px] rounded-full bg-blue-500/5 blur-[100px]"></div>
+    </div>
+  </div>
+
+  <!-- Dot grid pattern (behind globe, z-20) -->
+  <div class="hero-grid pointer-events-none absolute inset-0 -z-20 bg-[radial-gradient(circle,oklch(1_0_0/8%)_1px,transparent_1px)] bg-[size:3rem_3rem]"></div>
+
+  <div class="container mx-auto flex min-h-screen max-w-6xl items-end px-4 pb-8 pt-[45vh] sm:items-center sm:px-6 sm:pb-0 sm:pt-0 sm:py-32 lg:py-40">
+    <div class="mx-auto max-w-3xl text-center">
+      <!-- Pill badge -->
+      <div class="hero-reveal hero-reveal-1 mb-6 inline-flex items-center gap-2 rounded-full border border-border/60 bg-muted/50 px-4 py-1.5 text-sm text-muted-foreground backdrop-blur-sm">
+        <span class="relative flex h-2 w-2">
+          <span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-green-400 opacity-75"></span>
+          <span class="relative inline-flex h-2 w-2 rounded-full bg-green-500"></span>
+        </span>
+        {t('hero.badge')}
+      </div>
+
+      <h1 class="hero-reveal hero-reveal-2 mb-4 text-3xl font-extrabold tracking-tight sm:mb-6 sm:text-5xl lg:text-6xl">
+        {t('hero.title.prefix')}
+        <span class="relative">
+          <span class="bg-gradient-to-r from-red-500 via-white to-blue-500 bg-clip-text text-transparent"> {t('hero.title.chile')} </span>
+        </span>
+        🇨🇱
+      </h1>
+
+      <p class="hero-reveal hero-reveal-3 mx-auto mb-6 max-w-2xl text-base leading-relaxed text-muted-foreground sm:mb-10 sm:text-xl">
+        {t('hero.description.line1')} 
+        {t('hero.description.line2')}
+      </p>
+
+      <div class="hero-reveal hero-reveal-4 flex flex-col items-center justify-center gap-4 sm:flex-row">
+        <a
+          href="#proyectos"
+          data-scroll-to="proyectos"
+          class="inline-flex h-11 items-center justify-center rounded-lg bg-primary px-8 text-sm font-semibold text-primary-foreground shadow-sm transition-all hover:bg-primary/90 hover:shadow-md"
+        >
+          {t('hero.cta.explore')}
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="ml-2">
+            <path d="m6 17 5-5-5-5"/><path d="m13 17 5-5-5-5"/>
+          </svg>
+        </a>
+        <a
+          href="#contribuir"
+          data-scroll-to="contribuir"
+          class="inline-flex h-11 items-center justify-center rounded-lg border border-border bg-background px-8 text-sm font-semibold text-foreground shadow-sm transition-all hover:bg-accent hover:text-accent-foreground"
+        >
+          {t('hero.cta.publish')}
+        </a>
+      </div>
+
+      <!-- Stats -->
+      <div class="hero-reveal hero-reveal-5 mt-6 grid grid-cols-3 gap-4 border-t border-border/40 pt-6 sm:mt-16 sm:gap-8 sm:pt-10">
+        <div class="text-center">
+          <div class="text-xl font-bold tracking-tight sm:text-3xl" id="stat-projects">6+</div>
+          <div class="mt-1 text-xs text-muted-foreground sm:text-sm">{t('hero.stat.projects')}</div>
+        </div>
+        <div class="text-center">
+          <div class="text-xl font-bold tracking-tight sm:text-3xl">12+</div>
+          <div class="mt-1 text-xs text-muted-foreground sm:text-sm">{t('hero.stat.categories')}</div>
+        </div>
+        <div class="text-center">
+          <div class="text-xl font-bold tracking-tight sm:text-3xl">100%</div>
+          <div class="mt-1 text-xs text-muted-foreground sm:text-sm">{t('hero.stat.chilean')}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  @keyframes heroReveal {
+    0% {
+      opacity: 0;
+      transform: translateY(20px);
+      filter: blur(6px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+      filter: blur(0);
+    }
+  }
+
+  .hero-reveal {
+    opacity: 0;
+    animation: heroReveal 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+
+  /* Base delay = 2.8s (after globe intro ~3s), stagger 150ms each */
+  .hero-reveal-1 { animation-delay: 2.8s; }
+  .hero-reveal-2 { animation-delay: 2.95s; }
+  .hero-reveal-3 { animation-delay: 3.1s; }
+  .hero-reveal-4 { animation-delay: 3.25s; }
+  .hero-reveal-5 { animation-delay: 3.5s; }
+
+  /* Skip delays on back navigation */
+  :global(.skip-intro) .hero-reveal {
+    animation-delay: 0s !important;
+    animation-duration: 0.3s !important;
+  }
+
+  @keyframes gridFadeIn {
+    0% { opacity: 0; }
+    100% { opacity: 1; }
+  }
+
+  .hero-grid {
+    opacity: 0;
+    animation: gridFadeIn 1.5s ease-out 3.6s forwards;
+  }
+
+  :global(.skip-intro) .hero-grid {
+    animation-delay: 0s !important;
+    animation-duration: 0.3s !important;
+  }
+</style>
+
+<script>
+  // Flag View Transition navigations to skip intro on return
+  document.addEventListener('astro:before-preparation', () => {
+    (window as any).__cwSkipIntro = true
+  })
+
+  function checkSkipIntro() {
+    if ((window as any).__cwSkipIntro) {
+      document.getElementById('inicio')?.classList.add('skip-intro')
+    } else {
+      document.getElementById('inicio')?.classList.remove('skip-intro')
+    }
+  }
+  checkSkipIntro()
+  document.addEventListener('astro:after-swap', checkSkipIntro)
+
+  function setupScrollLinks() {
+    document.querySelectorAll<HTMLAnchorElement>('[data-scroll-to]').forEach(link => {
+      link.addEventListener('click', (e) => {
+        e.preventDefault()
+        const id = link.dataset.scrollTo
+        if (!id) return
+        const target = document.getElementById(id)
+        if (target) {
+          target.scrollIntoView({ behavior: 'smooth', block: 'start' })
+        }
+      })
+    })
+  }
+  setupScrollLinks()
+  document.addEventListener('astro:after-swap', setupScrollLinks)
+</script>

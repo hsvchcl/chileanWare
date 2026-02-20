@@ -1,0 +1,182 @@
+---
+import '../styles/global.css'
+import { ViewTransitions } from 'astro:transitions'
+import type { Lang } from '../i18n'
+import { useTranslations, getLangPrefix, getAlternateLang } from '../i18n'
+
+interface Props {
+  title?: string
+  description?: string
+  lang?: Lang
+  /** OG image path relative to site root (default: /og-default.png) */
+  image?: string
+  /** Page type for OG (default: website) */
+  type?: 'website' | 'article'
+  /** Article publish date (ISO string) for article type */
+  publishDate?: string
+  /** Article author name */
+  articleAuthor?: string
+  /** Article tags */
+  articleTags?: string[]
+}
+
+const {
+  lang = 'en',
+  title,
+  description,
+  image = '/og-default.png',
+  type = 'website',
+  publishDate,
+  articleAuthor,
+  articleTags = [],
+} = Astro.props
+
+const t = useTranslations(lang)
+const resolvedTitle = title ?? t('site.title')
+const resolvedDescription = description ?? t('site.description')
+
+const SITE_URL = 'https://chileanware.dev'
+const currentPath = Astro.url.pathname
+const canonicalURL = new URL(currentPath, SITE_URL).href
+const ogImageURL = new URL(image, SITE_URL).href
+
+// Build alternate language URLs
+const altLang = getAlternateLang(lang)
+const altPrefix = getLangPrefix(altLang)
+const currentPrefix = getLangPrefix(lang)
+
+// Strip current lang prefix to get the clean path, then add alt prefix
+let cleanPath = currentPath
+if (currentPrefix && cleanPath.startsWith(currentPrefix)) {
+  cleanPath = cleanPath.slice(currentPrefix.length) || '/'
+}
+const altURL = new URL(`${altPrefix}${cleanPath === '/' ? '/' : cleanPath}`, SITE_URL).href
+
+// x-default points to the default language (en)
+const enPrefix = getLangPrefix('en')
+const xDefaultURL = new URL(`${enPrefix}${cleanPath === '/' ? '/' : cleanPath}`, SITE_URL).href
+
+const ogLocale = lang === 'es' ? 'es_CL' : 'en_US'
+const ogLocaleAlt = lang === 'es' ? 'en_US' : 'es_CL'
+---
+
+<!doctype html>
+<html lang={lang} class="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content={resolvedDescription} />
+    <meta name="generator" content={Astro.generator} />
+
+    <!-- Canonical & hreflang -->
+    <link rel="canonical" href={canonicalURL} />
+    <link rel="alternate" hreflang={lang} href={canonicalURL} />
+    <link rel="alternate" hreflang={altLang} href={altURL} />
+    <link rel="alternate" hreflang="x-default" href={xDefaultURL} />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content={type} />
+    <meta property="og:url" content={canonicalURL} />
+    <meta property="og:title" content={resolvedTitle} />
+    <meta property="og:description" content={resolvedDescription} />
+    <meta property="og:image" content={ogImageURL} />
+    <meta property="og:site_name" content="chileanWare" />
+    <meta property="og:locale" content={ogLocale} />
+    <meta property="og:locale:alternate" content={ogLocaleAlt} />
+    {type === 'article' && publishDate && (
+      <meta property="article:published_time" content={publishDate} />
+    )}
+    {type === 'article' && articleAuthor && (
+      <meta property="article:author" content={articleAuthor} />
+    )}
+    {type === 'article' && articleTags.map((tag) => (
+      <meta property="article:tag" content={tag} />
+    ))}
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={resolvedTitle} />
+    <meta name="twitter:description" content={resolvedDescription} />
+    <meta name="twitter:image" content={ogImageURL} />
+
+    <!-- Additional SEO -->
+    <meta name="robots" content="index, follow" />
+    <meta name="theme-color" content="#09090b" media="(prefers-color-scheme: dark)" />
+    <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
+
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <title>{resolvedTitle}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+
+    <!-- JSON-LD Structured Data -->
+    <script is:inline type="application/ld+json" set:html={JSON.stringify(
+      type === 'article'
+        ? {
+            '@context': 'https://schema.org',
+            '@type': 'SoftwareApplication',
+            name: resolvedTitle.replace(' — chileanWare', ''),
+            description: resolvedDescription,
+            url: canonicalURL,
+            ...(articleAuthor ? { author: { '@type': 'Person', name: articleAuthor } } : {}),
+            ...(publishDate ? { datePublished: publishDate } : {}),
+            inLanguage: lang,
+            isPartOf: {
+              '@type': 'WebSite',
+              name: 'chileanWare',
+              url: SITE_URL,
+            },
+          }
+        : {
+            '@context': 'https://schema.org',
+            '@type': 'WebSite',
+            name: 'chileanWare',
+            url: SITE_URL,
+            description: resolvedDescription,
+            inLanguage: ['en', 'es'],
+            potentialAction: {
+              '@type': 'SearchAction',
+              target: `${SITE_URL}/#projects`,
+            },
+          }
+    )} />
+
+    <!-- Anti-FOUC: apply saved theme before first paint -->
+    <script is:inline>
+      (function() {
+        const saved = localStorage.getItem('theme')
+        if (saved === 'light') {
+          document.documentElement.classList.remove('dark')
+        } else {
+          document.documentElement.classList.add('dark')
+        }
+      })()
+    </script>
+    <ViewTransitions />
+  </head>
+  <body class="min-h-screen scroll-smooth bg-background font-sans antialiased">
+    <slot />
+  </body>
+</html>
+
+<!-- Persist theme across View Transitions (before-swap prevents flash) -->
+<script>
+  document.addEventListener('astro:before-swap', (ev: any) => {
+    const saved = localStorage.getItem('theme')
+    if (saved === 'light') {
+      ev.newDocument.documentElement.classList.remove('dark')
+    } else {
+      ev.newDocument.documentElement.classList.add('dark')
+    }
+  })
+</script>
+
+<style is:global>
+  body {
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  }
+  code, pre {
+    font-family: 'JetBrains Mono', monospace;
+  }
+</style>
