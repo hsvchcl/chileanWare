@@ -1,0 +1,46 @@
+name: PR Scope Check
+
+on:
+  pull_request:
+    types: [opened, synchronize, edited]
+    branches:
+      - develop
+
+permissions:
+  contents: read
+  pull-requests: read
+
+jobs:
+  check-files:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get changed files
+        id: files
+        uses: dorny/paths-filter@v3
+        with:
+          filters: |
+            allowed:
+              - 'src/content/projects/**/*.md'
+            disallowed:
+              - '!src/content/projects/**/*.md'
+
+      - name: Block changes outside allowed path
+        if: steps.files.outputs.disallowed == 'true'
+        run: |
+          echo "❌ Tu PR modifica archivos fuera de src/content/projects/"
+          echo ""
+          echo "Solo se permiten cambios en archivos .md dentro de src/content/projects/"
+          echo "Por favor, elimina los cambios en otros archivos y vuelve a intentar."
+          exit 1
+
+      - name: Verify at least one project file changed
+        if: steps.files.outputs.allowed != 'true'
+        run: |
+          echo "⚠️ Tu PR no incluye ningún archivo .md en src/content/projects/"
+          echo "Asegúrate de agregar tu proyecto como un archivo .md en esa carpeta."
+          exit 1
+
+      - name: PR scope OK
+        if: steps.files.outputs.allowed == 'true' && steps.files.outputs.disallowed != 'true'
+        run: |
+          echo "✅ PR válido — solo modifica archivos en src/content/projects/"

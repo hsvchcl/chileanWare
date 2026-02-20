@@ -1,0 +1,18 @@
+name: PR Target Check
+
+on:
+  pull_request:
+    types: [opened, edited, synchronize]
+    branches-ignore:
+      - develop
+
+jobs:
+  check-target:
+    if: github.base_ref != 'develop'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Block PR to wrong branch
+        run: |
+          echo "❌ Los Pull Requests deben apuntar a la branch 'develop', no a '${{ github.base_ref }}'."
+          echo "Por favor, cambia el target de tu PR a 'develop'."
+          exit 1
