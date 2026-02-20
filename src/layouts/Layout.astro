@@ -35,7 +35,7 @@ const t = useTranslations(lang)
 const resolvedTitle = title ?? t('site.title')
 const resolvedDescription = description ?? t('site.description')
 
-const SITE_URL = 'https://chileanware.dev'
+const SITE_URL = 'https://chileanware.web.app'
 const currentPath = Astro.url.pathname
 const canonicalURL = new URL(currentPath, SITE_URL).href
 const ogImageURL = new URL(image, SITE_URL).href

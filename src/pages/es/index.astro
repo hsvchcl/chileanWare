@@ -48,6 +48,10 @@ const categories = Object.keys(categoryIcons).map(name => ({
   count: categoryCounts[name] || 0,
   icon: categoryIcons[name],
 }))
+
+const projectCount = allProjects.length
+const uniqueCategories = new Set(allProjects.map(p => p.data.category))
+const categoryCount = uniqueCategories.size
 ---
 
 <Layout lang={lang}>
@@ -55,7 +59,7 @@ const categories = Object.keys(categoryIcons).map(name => ({
   <ThemeToggle />
   <DotNav client:load lang={lang} />
   <main>
-    <Hero lang={lang} />
+    <Hero lang={lang} projectCount={projectCount} categoryCount={categoryCount} />
     <ProjectsGrid client:load projects={sortedProjects} categories={categories} lang={lang} />
     <Contribute lang={lang} />
     <Sponsors lang={lang} />
