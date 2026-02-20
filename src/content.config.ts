@@ -26,6 +26,7 @@ const projects = defineCollection({
       'Other'
     ]).default('Other'),
     featured: z.boolean().default(false),
+    sponsor: z.boolean().default(false),
     publishDate: z.coerce.date(),
   }),
 })

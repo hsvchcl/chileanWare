@@ -7,6 +7,7 @@ websiteUrl: "https://noamvc.web.app/"
 tags: ["tauri", "rust", "react", "webrtc", "encryption", "p2p", "typescript"]
 category: "Other"
 featured: false
+sponsor: true
 publishDate: 2026-02-19
 ---
 

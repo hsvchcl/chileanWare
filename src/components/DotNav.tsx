@@ -89,7 +89,7 @@ export default function DotNav({ lang = 'en' }: Props) {
 
   return (
     <nav
-      className="fixed right-5 top-1/2 z-50 flex -translate-y-1/2 flex-col items-center gap-5 transition-all duration-500"
+      className="fixed right-5 top-1/2 z-50 hidden -translate-y-1/2 flex-col items-center gap-5 transition-all duration-500 sm:flex"
       style={{
         opacity: visible ? 1 : 0,
         pointerEvents: visible ? 'auto' : 'none',
@@ -132,7 +132,7 @@ export default function DotNav({ lang = 'en' }: Props) {
               <span
                 className="absolute inset-1 rounded-full border-2 transition-all duration-500 ease-out"
                 style={{
-                  borderColor: isActive ? 'oklch(0.7 0.15 250)' : 'transparent',
+                  borderColor: isActive ? 'oklch(0.63 0.26 29)' : 'transparent',
                   transform: `scale(${isActive ? 1 : 0.5})`,
                   opacity: isActive ? 1 : 0,
                 }}
@@ -143,7 +143,7 @@ export default function DotNav({ lang = 'en' }: Props) {
                 className="absolute inset-0 rounded-full transition-all duration-500"
                 style={{
                   background: isActive
-                    ? 'radial-gradient(circle, oklch(0.7 0.15 250 / 0.2), transparent 70%)'
+                    ? 'radial-gradient(circle, oklch(0.63 0.26 29 / 0.2), transparent 70%)'
                     : 'transparent',
                 }}
               />
@@ -155,12 +155,12 @@ export default function DotNav({ lang = 'en' }: Props) {
                   width: isActive ? '10px' : isHovered ? '8px' : '6px',
                   height: isActive ? '10px' : isHovered ? '8px' : '6px',
                   backgroundColor: isActive
-                    ? 'oklch(0.7 0.15 250)'
+                    ? 'oklch(0.63 0.26 29)'
                     : isHovered
                       ? 'oklch(0.85 0 0)'
                       : 'oklch(0.55 0 0)',
                   boxShadow: isActive
-                    ? '0 0 12px oklch(0.7 0.15 250 / 0.5)'
+                    ? '0 0 12px oklch(0.63 0.26 29 / 0.5)'
                     : 'none',
                 }}
               />

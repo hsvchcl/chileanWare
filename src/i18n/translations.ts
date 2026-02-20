@@ -30,7 +30,8 @@ export const translations = {
 
     // ProjectsGrid
     'projects.heading': 'All projects',
-    'projects.featured': '⭐ Featured',
+    'projects.featured': 'Featured',
+    'projects.sponsor': 'Sponsor',
     'projects.by': 'by',
     'projects.project_singular': 'project',
     'projects.project_plural': 'projects',
@@ -141,7 +142,8 @@ export const translations = {
 
     // ProjectsGrid
     'projects.heading': 'Todos los proyectos',
-    'projects.featured': '⭐ Destacado',
+    'projects.featured': 'Destacado',
+    'projects.sponsor': 'Sponsor',
     'projects.by': 'por',
     'projects.project_singular': 'proyecto',
     'projects.project_plural': 'proyectos',

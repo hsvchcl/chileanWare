@@ -13,6 +13,7 @@ interface Project {
   tags: string[]
   category: string
   featured?: boolean
+  sponsor?: boolean
   websiteUrl?: string
   repoUrl?: string
 }
@@ -35,7 +36,7 @@ const categoryIcons: Record<string, string> = {
   'AI/ML': '🤖', 'IoT': '📡', 'Game': '🎮', 'Other': '💡',
 }
 
-function ProjectCard({ title, description, slug, author, tags, category, featured, websiteUrl, repoUrl, lang = 'en' }: Project & { lang?: Lang }) {
+function ProjectCard({ title, description, slug, author, tags, category, featured, sponsor, websiteUrl, repoUrl, lang = 'en' }: Project & { lang?: Lang }) {
   const prefix = lang === 'en' ? '' : `/${lang}`
   return (
     <article
@@ -45,11 +46,20 @@ function ProjectCard({ title, description, slug, author, tags, category, feature
         WebkitTransform: 'translateZ(0)',
       } as React.CSSProperties}
     >
-      {featured && (
-        <div className="absolute -top-3 right-4 z-10">
-          <span className="inline-flex items-center gap-1 rounded-full bg-primary px-3 py-1 text-xs font-semibold text-primary-foreground shadow-sm">
-            {t(lang, 'projects.featured')}
-          </span>
+      {(featured || sponsor) && (
+        <div className="absolute right-3 top-3 z-10 flex items-center gap-1.5">
+          {sponsor && (
+            <span className="inline-flex items-center gap-1 rounded-full border border-amber-500/30 bg-amber-500/10 px-2 py-0.5 text-[10px] font-medium tracking-wide text-amber-500 dark:border-amber-400/30 dark:bg-amber-400/10 dark:text-amber-400 backdrop-blur-sm">
+              <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"/></svg>
+              {t(lang, 'projects.sponsor')}
+            </span>
+          )}
+          {featured && (
+            <span className="inline-flex items-center gap-1 rounded-full border border-border/60 bg-card/80 px-2 py-0.5 text-[10px] font-medium tracking-wide text-muted-foreground backdrop-blur-sm">
+              <span className="h-1.5 w-1.5 rounded-full bg-red-500/80" />
+              {t(lang, 'projects.featured')}
+            </span>
+          )}
         </div>
       )}
       <div className="flex flex-1 flex-col p-6">
